@@ -9,13 +9,13 @@ namespace utilities_calculation_console_app
     {
         static void Main(string[] args)
         {
-            UserCunsumptionData userProcessed = new();
+            UserConsumptionData userProcessed = new();
             userProcessed.ID = 1111;
             Dictionary<string, double> prices = new();
             Console.WriteLine("Введите test, чтобы изменить месяц передачи показаний.");
             if (Console.ReadLine().Trim() == "test")
             {
-                Console.WriteLine("Введите период в формате mm/yyyy, поумолчанию берётся текущий месяц и год.");
+                Console.WriteLine("Введите период в формате mm/yyyy, по умолчанию берётся текущий месяц и год.");
                 string inputDate = userProcessed.Period = Console.ReadLine().Trim();
                 ServicesCalculator.PreviousPeriod = $"{Convert.ToDateTime(inputDate).Month - 1}/{Convert.ToDateTime(inputDate).Year}";
             }
@@ -32,29 +32,29 @@ namespace utilities_calculation_console_app
                 int.TryParse(temp, out persons);
             } while (persons < 1);
             userProcessed.Persons = persons;
-            #region Рассчёт ХВС
+            #region Расчёт ХВС
         CWS:
             string input;
             ReadServiceInput("ХВС", out input);
             double CWSMeters = Convert.ToDouble(input);
-            (userProcessed.CWSCunsumption, prices["ХВС"]) = ServicesCalculator.CalculateCWS(persons, CWSMeters);
-            Console.WriteLine($"Ваш расход составил {userProcessed.CWSCunsumption}, если всё верно, введите 1.");
+            (userProcessed.CWSConsumption, prices["ХВС"]) = ServicesCalculator.CalculateCWS(persons, CWSMeters);
+            Console.WriteLine($"Ваш расход составил {userProcessed.CWSConsumption}, если всё верно, введите 1.");
             if (CheckInputKeyFailed()) goto CWS;
             #endregion
 
-            #region Рассчёт ГВС
+            #region Расчёт ГВС
             HWS:
             input = "";
             ReadServiceInput("ГВС", out input);
             //Console.WriteLine("Введите показания ГВС, если прибор учёта не установлен, введите -1");
             double HWSMeters = Convert.ToDouble(input);
-            ((userProcessed.HWSCCunsumption, prices["ГВС теплоноситель"]), (userProcessed.HWSTECunsumption, prices["ГВС нагрев"])) = ServicesCalculator.CalculateHWS(persons, HWSMeters);
-            Console.WriteLine($"Ваш расход теплоносителя составил {userProcessed.HWSCCunsumption},\n" +
-                $"Расход теплоэнергии составил {userProcessed.HWSTECunsumption} если всё верно, введите 1.");
+            ((userProcessed.HWSCConsumption, prices["ГВС теплоноситель"]), (userProcessed.HWSTEConsumption, prices["ГВС нагрев"])) = ServicesCalculator.CalculateHWS(persons, HWSMeters);
+            Console.WriteLine($"Ваш расход теплоносителя составил {userProcessed.HWSCConsumption},\n" +
+                $"Расход теплоэнергии составил {userProcessed.HWSTEConsumption} если всё верно, введите 1.");
             if (CheckInputKeyFailed()) goto HWS;
             #endregion
 
-            #region Рассчёт Электроэнергии
+            #region Расчёт Электроэнергии
             E:
             Console.WriteLine("Введите показания электроэнергии дневной тариф, если прибор учёта не установлен, введите -1");
             string[] inputs = new string[2];
@@ -62,9 +62,9 @@ namespace utilities_calculation_console_app
             if (inputs[0].Contains('-'))
             {
                 double EMeters = Convert.ToInt32(inputs[0]);
-                (userProcessed.E, prices["Электроэнергия"]) = ServicesCalculator.CalculateEStandart(persons, EMeters);
+                (userProcessed.E, prices["Электроэнергия"]) = ServicesCalculator.CalculateEStandard(persons, EMeters);
                 userProcessed.EN = userProcessed.ED = default;
-                Console.WriteLine($"Ваш расход электроэенергии составил {userProcessed.E}, если всё верно, введите 1.");
+                Console.WriteLine($"Ваш расход электроэнергии составил {userProcessed.E}, если всё верно, введите 1.");
                 if (CheckInputKeyFailed()) goto E;
             }
             else

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class UserCunsumptionData
+    public class UserConsumptionData
     {
         /// <summary>
         /// Тестовый айди
@@ -15,9 +15,9 @@ namespace Models
         //public string Period => $"{DateTime.Now.Month}/{DateTime.Now.Year}"; 
         public string Period { get; set; }
         public int Persons { get; set; }
-        public double CWSCunsumption { get; set; }
-        public double HWSCCunsumption { get; set; }
-        public double HWSTECunsumption { get; set; }
+        public double CWSConsumption { get; set; }
+        public double HWSCConsumption { get; set; }
+        public double HWSTEConsumption { get; set; }
         public double E { get; set; }
         public double ED { get; set; }
         public double EN { get; set; }

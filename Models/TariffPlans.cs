@@ -18,10 +18,10 @@ namespace Models
         [Key]
         public string Service { get; set; }
         /// <summary>
-        /// RUB per utin
+        /// RUB per unit
         /// </summary>
         public double Tariff { get; set; }
-        public double Standart { get; set; }
+        public double Standard { get; set; }
         public string Units { get; set; }
     }
 }

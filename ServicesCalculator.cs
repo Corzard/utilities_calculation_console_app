@@ -9,25 +9,25 @@ namespace utilities_calculation_console_app
     public static class ServicesCalculator
     {
         static readonly List<TariffPlans> plans;
-        static readonly UserCunsumptionData previosPeriod;
+        static readonly UserConsumptionData previousPeriod;
         static public string PreviousPeriod { get; set; }
         static ServicesCalculator()
         {
             plans = DataLoader.LoadTariffPlans("DataBases\\tariff_plans.db");
-            previosPeriod = DataLoader.LoadUserData("DataBases\\userData.db", 1111, PreviousPeriod);
+            previousPeriod = DataLoader.LoadUserData("DataBases\\userData.db", 1111, PreviousPeriod);
         }
 
         static private double DefaultCalculation(double Volume, double Tariff)
         {
             return Volume * Tariff;
         }
-        static private double VolumeByhMetersData(double MCurrent, double MPreviouse)
+        static private double VolumeByhMetersData(double MCurrent, double MPrevious)
         {
-            return MCurrent - MPreviouse;
+            return MCurrent - MPrevious;
         }
-        static private double VolumeByStandart(int NumberOfPersons, double Standart)
+        static private double VolumeByStandard(int NumberOfPersons, double Standard)
         {
-            return NumberOfPersons * Standart;
+            return NumberOfPersons * Standard;
         }
 
         /// <summary>
@@ -43,14 +43,14 @@ namespace utilities_calculation_console_app
             double volume;
             if (MetersData == -1)
             {
-                MetersData = CWS.Standart;
-                volume = VolumeByStandart(NumberOfPersons, MetersData);
+                MetersData = CWS.Standard;
+                volume = VolumeByStandard(NumberOfPersons, MetersData);
                 cost = DefaultCalculation(volume, CWS.Tariff);
             }
             else
             {
                 //Load previous data;
-                double previousMonth = previosPeriod == null ? 0 : previosPeriod.CWSCunsumption;
+                double previousMonth = previousPeriod == null ? 0 : previousPeriod.CWSConsumption;
                 volume = VolumeByhMetersData(MetersData, previousMonth);
                 cost = DefaultCalculation(volume, CWS.Tariff);
             }
@@ -75,19 +75,19 @@ namespace utilities_calculation_console_app
             double TECost;
             if (MetersData == -1)
             {
-                MetersData = HWSC.Standart;
-                coolantVolume = VolumeByStandart(NumberOfPersons, MetersData);
+                MetersData = HWSC.Standard;
+                coolantVolume = VolumeByStandard(NumberOfPersons, MetersData);
                 coolantCost = DefaultCalculation(coolantVolume, HWSC.Tariff);
-                TEVolume = coolantVolume * HWSTE.Standart;
+                TEVolume = coolantVolume * HWSTE.Standard;
                 TECost = DefaultCalculation(TEVolume, HWSTE.Tariff);
             }
             else
             {
-                double previousMonthС = previosPeriod == null ? 0 : previosPeriod.CWSCunsumption;
+                double previousMonthС = previousPeriod == null ? 0 : previousPeriod.CWSConsumption;
 
                 coolantVolume = VolumeByhMetersData(MetersData, previousMonthС);
                 coolantCost = DefaultCalculation(coolantVolume, HWSC.Tariff);
-                TEVolume = coolantVolume * HWSTE.Standart;
+                TEVolume = coolantVolume * HWSTE.Standard;
                 TECost = DefaultCalculation(TEVolume, HWSTE.Tariff);
 
             }
@@ -100,13 +100,13 @@ namespace utilities_calculation_console_app
         /// <param name="NumberOfPersons">Количество проживающих</param>
         /// <param name="MetersData">Показания счетчиков ГВС</param>
         /// <returns>Объём и стоимость услуги электроэнергии</returns>
-        static public (double, double) CalculateEStandart(int NumberOfPersons, double MetersData)
+        static public (double, double) CalculateEStandard(int NumberOfPersons, double MetersData)
         {
             TariffPlans E = plans.Find(item => item.Service == "E");
             double volume;
             double cost;
-            MetersData = E.Standart;
-            volume = VolumeByStandart(NumberOfPersons, MetersData);
+            MetersData = E.Standard;
+            volume = VolumeByStandard(NumberOfPersons, MetersData);
             cost = DefaultCalculation(volume, E.Tariff);
             return (volume, cost);
         }
@@ -125,8 +125,8 @@ namespace utilities_calculation_console_app
             double DayCost;
             double NightCost;
             //Load previous data;
-            double previousMonthED = previosPeriod == null ? 0 : previosPeriod.ED;
-            double previousMonthEN = previosPeriod == null ? 0 : previosPeriod.EN;
+            double previousMonthED = previousPeriod == null ? 0 : previousPeriod.ED;
+            double previousMonthEN = previousPeriod == null ? 0 : previousPeriod.EN;
 
             DayVolume = VolumeByhMetersData(MetersDataDay, previousMonthED);
             NightVolume = VolumeByhMetersData(MetersDataNight, previousMonthEN);

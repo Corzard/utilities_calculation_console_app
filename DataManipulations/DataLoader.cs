@@ -18,12 +18,12 @@ namespace DataManipulations
             }
             return data;
         }
-        public static UserCunsumptionData LoadUserData(string path, int ID, string period)
+        public static UserConsumptionData LoadUserData(string path, int ID, string period)
         {
-            UserCunsumptionData data;
+            UserConsumptionData data;
             using (UserContext db = new(path))
             {
-                data = db.UserCunsumptionData.FindAsync(ID,period).Result;
+                data = db.UserConsumptionData.FindAsync(ID,period).Result;
             }
             return data;
         }

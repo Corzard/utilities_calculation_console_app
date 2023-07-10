@@ -9,14 +9,13 @@ namespace DataManipulations
 
     public static class DataSaver 
     {
-        public static bool SaveUserData(string path, UserCunsumptionData userData)
+        public static bool SaveUserData(string path, UserConsumptionData userData)
         {
-            //List<TariffPlans> data;
             using (UserContext db = new(path))
             {
                 try
                 {
-                    db.UserCunsumptionData.AddAsync(userData);
+                    db.UserConsumptionData.AddAsync(userData);
                     db.SaveChanges();
                     return true;
                 }
